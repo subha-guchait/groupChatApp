@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 
-const createUser = async (name, email, phone, password) => {
+const createUser = async ({ name, email, phone, password, isAccepted }) => {
   try {
     const saltrounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -11,6 +11,7 @@ const createUser = async (name, email, phone, password) => {
       email,
       phone,
       password: hashedPassword,
+      isAccepted,
     });
     return newUser;
   } catch (err) {

@@ -5,7 +5,7 @@ const createUser = require("../services/userServices");
 
 exports.signUp = async (req, res, next) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, isAccepted } = req.body;
 
     const existingUser = await User.findOne({
       where: {
@@ -16,7 +16,7 @@ exports.signUp = async (req, res, next) => {
       return res.status(409).json({ message: "User already exists" });
     }
 
-    const newUser = await createUser(name, email, phone, password);
+    const newUser = await createUser(req.body);
 
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {

@@ -8,6 +8,7 @@ const userSchema = Joi.object({
     .pattern(/^[0-9]+$/)
     .required(),
   password: Joi.string().min(8).required(),
+  isAccepted: Joi.boolean().valid(true).required(),
 });
 
 module.exports = userSchema;

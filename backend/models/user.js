@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 
 const sequelize = require("../config/database");
+const { all } = require("../routes/userRoutes");
 
 const User = sequelize.define("user", {
   id: {
@@ -25,6 +26,10 @@ const User = sequelize.define("user", {
   },
   password: {
     type: Sequelize.STRING,
+    allowNull: false,
+  },
+  isAccepted: {
+    type: Sequelize.BOOLEAN,
     allowNull: false,
   },
 });
