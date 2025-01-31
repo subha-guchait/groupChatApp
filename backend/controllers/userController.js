@@ -34,7 +34,7 @@ exports.logIn = async (req, res, next) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const user = await User.findOne({ wher: { email: email } });
+    const user = await User.findOne({ where: { email: email } });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

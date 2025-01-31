@@ -31,7 +31,6 @@ const useSignup = () => {
 
       console.log(res.data);
     } catch (err) {
-      console.log(err);
       if (err.response.status === 409) {
         toast.error("Email or phone number already exists");
         return;

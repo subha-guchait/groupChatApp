@@ -4,17 +4,17 @@ import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
 
 const Signup = () => {
+  const [isAccepted, setIsAccepted] = useState(false);
+
   const [input, setInput] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
-    isAccepted: false,
+    isAccepted: setIsAccepted,
   });
 
   const { loading, signup } = useSignup();
-
-  const [isAccepted, setIsAccepted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,10 +90,11 @@ const Signup = () => {
             <input
               type="checkbox"
               className="toggle"
-              checked={input.isAccepted}
-              onChange={(e) =>
-                setInput({ ...input, isAccepted: e.target.checked })
-              }
+              checked={isAccepted}
+              onChange={(e) => {
+                setIsAccepted(e.target.checked);
+                setInput({ ...input, isAccepted: e.target.checked });
+              }}
             />
 
             <span className="p-2">
@@ -108,8 +109,16 @@ const Signup = () => {
           </div>
 
           <div>
-            <button type="submit" className="btn btn-primary w-full mt-4">
-              Signup
+            <button
+              type="submit"
+              className="btn btn-primary w-full mt-4"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
         </form>
