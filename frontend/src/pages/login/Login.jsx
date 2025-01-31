@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
@@ -9,10 +9,15 @@ const Login = () => {
   });
 
   const { loading, login } = useLogin();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(input);
+    try {
+      await login(input);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

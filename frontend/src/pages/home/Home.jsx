@@ -1,9 +1,28 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios";
 
 const Home = () => {
+  const [input, setInput] = useState({
+    message: "",
+  });
+
+  const sendMessage = async () => {
+    try {
+      const newMessage = await axios.post("/api/message/sendmessage", input, {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+
+      setInput({ message: "" });
+
+      console.log(newMessage);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-white min-w-96 mx-auto">
+    <div className="flex flex-col h-screen bg-white w-screen mx-auto">
       <h1 className="text-center text-2xl font-bold p-4">Chat App</h1>
       <div className="flex-grow overflow-auto p-4 space-y-2">
         <div className="chat chat-start">
@@ -43,12 +62,14 @@ const Home = () => {
         <input
           type="text"
           className="input input-bordered flex-grow mr-2"
-          //   value={input}
+          value={input.message}
           placeholder="Type a message..."
-          //   onChange={(e) => setInput(e.target.value)}
-          //   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          onChange={(e) => setInput({ ...input, message: e.target.value })}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button className="btn btn-primary">Send</button>
+        <button className="btn btn-primary" onClick={sendMessage}>
+          Send
+        </button>
       </div>
     </div>
   );
