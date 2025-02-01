@@ -20,7 +20,11 @@ exports.signUp = async (req, res, next) => {
 
     const newUser = await createUser(req.body);
 
-    res.status(201).json({ message: "User created successfully" });
+    const token = generateAccessToken(newUser.id, newUser.name, newUser.email);
+
+    res
+      .status(201)
+      .json({ message: "User created successfully", token: token });
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -46,7 +50,7 @@ exports.logIn = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    const token = generateAccessToken(user.id, user.email);
+    const token = generateAccessToken(user.id, user.name, user.email);
 
     res.status(200).json({ message: "Login successful", token });
   } catch (err) {

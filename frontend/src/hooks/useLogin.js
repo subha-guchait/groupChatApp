@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useAuthContext } from "../context/AuthContext";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { setAuthUser } = useAuthContext();
 
   const login = async ({ email, password }) => {
     const sucess = handleInputErrors({ email, password });
@@ -18,9 +19,11 @@ const useLogin = () => {
 
       localStorage.setItem("token", res.data.token);
       toast.success("Login successful");
-      navigate("/");
+
+      //context
+      setAuthUser(res.data.token);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err.response.status === 401) {
         toast.error("Incorrect password");
         return;
@@ -33,7 +36,7 @@ const useLogin = () => {
         toast.error("All fields are required");
         return;
       }
-      toast.error("Something went wrong");
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

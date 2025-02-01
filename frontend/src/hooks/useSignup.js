@@ -1,9 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useAuthContext } from "../context/AuthContext";
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
+  const { setAuthUser } = useAuthContext();
 
   const signup = async ({ name, email, phone, password, isAccepted }) => {
     const sucess = handleInputErrors({
@@ -27,15 +29,17 @@ const useSignup = () => {
       });
 
       toast.success("Signup successful");
-      window.location.href = "/login";
+      localStorage.setItem("token", res.data.token);
 
-      console.log(res.data);
+      //context
+      setAuthUser(res.data.token);
     } catch (err) {
+      console.error(err);
       if (err.response.status === 409) {
         toast.error("Email or phone number already exists");
         return;
       }
-      toast.error("Failed to signup");
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

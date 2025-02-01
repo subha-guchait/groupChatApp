@@ -11,7 +11,7 @@ const Signup = () => {
     email: "",
     phone: "",
     password: "",
-    isAccepted: setIsAccepted,
+    isAccepted: false,
   });
 
   const { loading, signup } = useSignup();
