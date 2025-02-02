@@ -2,12 +2,15 @@ import axios from "axios";
 
 const API_URL = "/api/message";
 
-export const getMessages = async () => {
+export const getMessages = async (lastMessageId) => {
   try {
-    const response = await axios.get(`${API_URL}/getmessages`, {
-      headers: { Authorization: localStorage.getItem("token") },
-    });
-    return response.data;
+    const response = await axios.get(
+      `${API_URL}/getmessages?lastMessageId=${lastMessageId}`,
+      {
+        headers: { Authorization: localStorage.getItem("token") },
+      }
+    );
+    return response.data.newMessages;
   } catch (err) {
     console.error(err);
     return [];

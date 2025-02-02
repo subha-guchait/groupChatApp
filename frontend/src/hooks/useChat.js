@@ -14,15 +14,32 @@ const useChat = () => {
       setUserId(userId);
     }
 
-    const fetchMessages = async () => {
-      const data = await getMessages();
-      setMessages(data);
+    //load messages from localStorage
+    const savedMessages =
+      JSON.parse(localStorage.getItem("chat-messages")) || [];
+
+    setMessages(savedMessages);
+
+    const fetchNewMessages = async () => {
+      const currentMessages =
+        JSON.parse(localStorage.getItem("chat-messages")) || [];
+      const lastMessageId =
+        currentMessages.length > 0
+          ? currentMessages[currentMessages.length - 1].id
+          : null;
+
+      const newMessages = await getMessages(lastMessageId);
+
+      const updatedMessages = [...currentMessages, ...newMessages].slice(-10);
+
+      setMessages(updatedMessages);
+      localStorage.setItem("chat-messages", JSON.stringify(updatedMessages));
     };
 
-    fetchMessages();
+    fetchNewMessages();
 
     // Set up an interval to fetch messages every second (1000ms)
-    const interval = setInterval(fetchMessages, 1000);
+    const interval = setInterval(fetchNewMessages, 5000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
@@ -30,7 +47,12 @@ const useChat = () => {
 
   const addMessage = async (message) => {
     const newMessage = await sendMessage(message);
-    if (newMessage) setMessages([...messages, newMessage]);
+    if (newMessage) {
+      const updatedMessages = [...messages, newMessage].slice(-10);
+
+      setMessages(updatedMessages);
+      localStorage.setItem("chat-messages", JSON.stringify(updatedMessages));
+    }
   };
 
   return { messages, addMessage, userId };
