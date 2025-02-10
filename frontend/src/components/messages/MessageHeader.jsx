@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MemberModal from "./MemberModal";
 import useGroupMembers from "../../hooks/useGroupMembers";
 
-const MessageHeader = () => {
+const MessageHeader = ({ activeGroup }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     groupMembers,
@@ -11,8 +11,8 @@ const MessageHeader = () => {
     removeMember,
     searchQuery,
     setSearchQuery,
-    filteredUsers,
-  } = useGroupMembers();
+    filteredUser,
+  } = useGroupMembers(activeGroup?.id);
 
   const handleToggleModal = () => {
     setIsModalOpen((prev) => !prev);
@@ -22,7 +22,7 @@ const MessageHeader = () => {
     <div>
       {/* Header */}
       <div className="flex flex-col bg-slate-300 px-4 py-2 mb-2">
-        <span className="label-text font-bold">Funny group</span>
+        <span className="label-text font-bold">{activeGroup.name}</span>
         <button onClick={handleToggleModal} className="btn btn-primary mt-2">
           Members
         </button>
@@ -37,7 +37,7 @@ const MessageHeader = () => {
         removeMember={removeMember}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        filteredUsers={filteredUsers}
+        filteredUser={filteredUser}
       />
     </div>
   );

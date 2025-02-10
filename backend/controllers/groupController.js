@@ -99,7 +99,7 @@ exports.addUser = async (req, res) => {
 
 exports.removeUser = async (req, res) => {
   const groupId = req.params.groupId;
-  const { userId } = req.body;
+  const userId = req.query.userId;
   try {
     if (!groupId) {
       return res.status(400).json({ err: "groupId is required" });
@@ -180,11 +180,15 @@ exports.searchNewuser = async (req, res) => {
     }
 
     const user = await searchUser(query);
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
 
     const userExists = await existingMember(user.id, groupId);
 
     res.status(200).json({ ...user, isMember: userExists });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err || "Internal Server Error" });
   }
 };

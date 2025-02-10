@@ -2,10 +2,10 @@ import axios from "axios";
 
 const API_URL = "/api/message";
 
-export const getMessages = async (lastMessageId) => {
+export const getMessages = async (groupId, lastMessageId) => {
   try {
     const response = await axios.get(
-      `${API_URL}/getmessages?lastMessageId=${lastMessageId}`,
+      `${API_URL}/getmessages/${groupId}?lastMessageId=${lastMessageId}`,
       {
         headers: { Authorization: localStorage.getItem("token") },
       }
@@ -17,11 +17,11 @@ export const getMessages = async (lastMessageId) => {
   }
 };
 
-export const sendMessage = async (message) => {
+export const sendMessage = async (groupId, message) => {
   try {
     const response = await axios.post(
       `${API_URL}/sendmessage`,
-      { message },
+      { message: message, groupId: groupId },
       {
         headers: { Authorization: localStorage.getItem("token") },
       }

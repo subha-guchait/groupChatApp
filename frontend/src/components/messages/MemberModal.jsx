@@ -11,7 +11,7 @@ const MemberModal = ({
   removeMember,
   searchQuery,
   setSearchQuery,
-  filteredUsers,
+  filteredUser,
 }) => {
   const [showSearch, setShowSearch] = useState(false);
 
@@ -35,13 +35,13 @@ const MemberModal = ({
             onClick={() => setShowSearch((prev) => !prev)}
             className="btn btn-secondary mb-2 w-full"
           >
-            {showSearch ? "Close Search" : "Search and Add User"}
+            {showSearch ? "Close Search" : "Add User"}
           </button>
           {showSearch && (
             <SearchUser
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              filteredUsers={filteredUsers}
+              filteredUser={filteredUser}
               addMember={addMember}
             />
           )}

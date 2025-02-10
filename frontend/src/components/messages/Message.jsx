@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Message = () => {
+const Message = ({ message, isCurrentUser }) => {
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${isCurrentUser ? "chat-end" : "chat-start"}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img
@@ -11,12 +11,22 @@ const Message = () => {
           />
         </div>
       </div>
-      <div className="chat-header">
-        Obi-Wan Kenobi
-        <time className="text-xs opacity-50">12:45</time>
+      <div className="chat-header">{message.userName}</div>
+      <div
+        className={`chat-bubble ${
+          isCurrentUser ? "chat-bubble-primary" : "chat-bubble-secondary"
+        }`}
+      >
+        {message.message}
       </div>
-      <div className="chat-bubble">You were the Chosen One!</div>
-      {/* <div className="chat-footer opacity-50">Delivered</div> */}
+      <div className="chat-footer opacity-50">
+        <time className="text-xs opacity-50">
+          {new Date(message.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </time>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import ChatInput from "../../components/chatInput";
+
 import ChatBubble from "../../components/chatBubble";
 import useChat from "../../hooks/useChat";
 import Sidebar from "../../components/sidebar/SideBar";
@@ -11,9 +11,9 @@ const Home = () => {
 
   return (
     <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden">
-      <Sidebar setActiveGroup={activeGroup} />
+      <Sidebar activeGroup={activeGroup} setActiveGroup={setActiveGroup} />
       {activeGroup ? (
-        <MessageContainer group={activeGroup} />
+        <MessageContainer activeGroup={activeGroup} />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500 ">
           Select a group to start chatting

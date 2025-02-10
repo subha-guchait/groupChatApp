@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Conversation from "./Conversation";
 import { getGroups } from "../../api/userService";
 
-const Conversations = ({ groups, setActiveGroup }) => {
+const Conversations = ({ activeGroup, groups, setActiveGroup }) => {
   return (
     <div className="py-2 flex flex-col overflow-auto">
       {groups.length > 0 ? (
@@ -10,7 +10,10 @@ const Conversations = ({ groups, setActiveGroup }) => {
           <Conversation
             key={group.id}
             groupName={group.name}
-            onClick={() => setActiveGroup(group)}
+            isActive={group.id === activeGroup?.id}
+            onClick={() => {
+              setActiveGroup(group);
+            }}
           />
         ))
       ) : (

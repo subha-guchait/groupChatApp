@@ -6,7 +6,7 @@ import LogoutButton from "./LogoutButton";
 import CreateGroup from "./CreateGroup";
 import { getGroups } from "../../api/userService";
 
-const Sidebar = ({ setActiveGroup }) => {
+const Sidebar = ({ activeGroup, setActiveGroup }) => {
   const [groups, setGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,6 +33,7 @@ const Sidebar = ({ setActiveGroup }) => {
 
       <Conversations
         groups={searchTerm ? filteredGroups : groups}
+        activeGroup={activeGroup}
         setActiveGroup={setActiveGroup}
       />
 

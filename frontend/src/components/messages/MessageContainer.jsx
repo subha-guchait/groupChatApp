@@ -4,14 +4,14 @@ import MessageInput from "./MessageInput";
 
 import MessageHeader from "./MessageHeader";
 
-const MessageContainer = () => {
+const MessageContainer = ({ activeGroup }) => {
   return (
     <div className="md:min-w-[450px]  flex flex-col">
       <>
         {/* header */}
-        <MessageHeader />
-        <Messages />
-        <MessageInput />
+        <MessageHeader activeGroup={activeGroup} />
+        <Messages activeGroup={activeGroup} />
+        <MessageInput activeGroup={activeGroup} />
       </>
     </div>
   );

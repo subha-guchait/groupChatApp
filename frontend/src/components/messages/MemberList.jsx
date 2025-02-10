@@ -1,7 +1,10 @@
 // src/components/MemberList.jsx
 import React from "react";
+import useChat from "../../hooks/useChat";
 
 const MemberList = ({ members, removeMember }) => {
+  const { userId } = useChat();
+
   return (
     <ul>
       {members.length === 0 ? (
@@ -23,12 +26,16 @@ const MemberList = ({ members, removeMember }) => {
               </div>
               <span>{member.name}</span>
             </div>
-            <button
-              onClick={() => removeMember(member.id)}
-              className="btn btn-error btn-xs"
-            >
-              Remove
-            </button>
+            {member.id === userId ? (
+              <span className="text-base-300 text-xs font-semibold">you</span>
+            ) : (
+              <button
+                onClick={() => removeMember(member.id)}
+                className="btn btn-error btn-xs"
+              >
+                Remove
+              </button>
+            )}
           </li>
         ))
       )}
