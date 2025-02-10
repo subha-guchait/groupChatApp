@@ -20,7 +20,7 @@ const useSignup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/api/user/signup", {
+      const res = await axios.post("/api/auth/signup", {
         name,
         email,
         phone,

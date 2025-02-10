@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div
       className="p-4 h-screen flex items-center justify-center"
-      data-theme="silk"
+      data-theme="corporate"
     >
       <div>
         <Toaster />

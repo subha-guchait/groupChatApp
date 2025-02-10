@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { getMessages, sendMessage } from "../services/messageService";
+import { getMessages, sendMessage } from "../api/messageService";
 
 const useChat = () => {
   const [messages, setMessages] = useState([]);

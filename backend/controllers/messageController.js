@@ -4,14 +4,17 @@ const Message = require("../models/message");
 
 exports.sendMessage = async (req, res) => {
   try {
-    const { message } = req.body;
-    if (!message) {
-      return res.status(400).json({ message: `Message can't be empty` });
+    const { message, groupId } = req.body;
+    if (!message || !groupId) {
+      return res
+        .status(400)
+        .json({ message: `message and groupId can't be empty` });
     }
     const newMessage = await Message.create({
       message,
       userName: req.user.name,
       userId: req.user.id,
+      groupId: groupId,
     });
     res.status(201).json(newMessage);
   } catch (err) {
@@ -19,11 +22,13 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-exports.getNewMesages = async (req, res, next) => {
+exports.getNewMesages = async (req, res) => {
+  const lastMessageId = req.query.lastMessageId || 0;
+  const groupId = req.params.groupId;
   try {
-    const lastMessageId = req.query.lastMessageId || 0;
     const newMessages = await Message.findAll({
       where: {
+        groupId: groupId,
         id: { [Op.gt]: lastMessageId },
       },
     });
@@ -34,12 +39,12 @@ exports.getNewMesages = async (req, res, next) => {
   }
 };
 
-exports.getAllMessages = async (req, res) => {
-  try {
-    const messages = await Message.findAll({ order: [["createdAt", "ASC"]] }); // get all messages
-    res.status(200).json(messages);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-};
+// exports.getAllMessages = async (req, res) => {
+//   try {
+//     const messages = await Message.findAll({ order: [["createdAt", "ASC"]] }); // get all messages
+//     res.status(200).json(messages);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// };

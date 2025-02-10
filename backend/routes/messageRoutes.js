@@ -8,6 +8,6 @@ const { authenticate } = require("../middlewares/auth");
 const router = express.Router();
 
 router.post("/sendmessage", authenticate, sendMessage);
-router.get("/getmessages", authenticate, getNewMesages);
+router.get("/getmessages/:groupId", authenticate, getNewMesages);
 
 module.exports = router;
