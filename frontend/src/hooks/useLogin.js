@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import toast from "react-hot-toast";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { useAuthContext } from "../context/AuthContext";
 
 const useLogin = () => {
@@ -18,6 +19,10 @@ const useLogin = () => {
       const res = await axios.post("/api/auth/login", { email, password });
 
       localStorage.setItem("token", res.data.token);
+      const { userId, name } = jwtDecode(res.data.token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", name);
+
       toast.success("Login successful");
 
       //context

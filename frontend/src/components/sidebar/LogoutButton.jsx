@@ -8,7 +8,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("token");
+      localStorage.clear();
       setAuthUser(null);
     } catch (err) {
       toast.error(err.message);

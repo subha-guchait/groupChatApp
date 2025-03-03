@@ -4,7 +4,8 @@ const Message = require("../models/message");
 
 exports.sendMessage = async (req, res) => {
   try {
-    const { message, groupId } = req.body;
+    const { message } = req.body;
+    const groupId = req.params.groupId;
     if (!message || !groupId) {
       return res
         .status(400)

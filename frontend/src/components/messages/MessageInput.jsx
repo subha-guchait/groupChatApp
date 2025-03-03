@@ -1,11 +1,30 @@
 import React, { useState } from "react";
 import { sendMessage } from "../../api/messageService";
+import { useSocket } from "../../context/SocketContext";
 
-const MessageInput = ({ activeGroup }) => {
+const MessageInput = ({ activeGroup, setMessages }) => {
   const [input, setInput] = useState("");
+  const { socket } = useSocket();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const userId = localStorage.getItem("userId");
+    const userName = localStorage.getItem("userName");
+    const newMessage = {
+      message: input,
+      userId,
+      userName,
+      createdAt: new Date(),
+    };
+    console.log(newMessage);
+
+    setMessages((prev) => [...prev, newMessage]);
+
+    socket.emit("send-message", {
+      groupId: activeGroup.id,
+      ...newMessage,
+    });
 
     await sendMessage(activeGroup.id, input);
     setInput("");

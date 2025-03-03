@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 
 import MessageHeader from "./MessageHeader";
 
 const MessageContainer = ({ activeGroup }) => {
+  const [messages, setMessages] = useState([]);
   return (
     <div className="md:min-w-[450px]  flex flex-col">
       <>
         {/* header */}
         <MessageHeader activeGroup={activeGroup} />
-        <Messages activeGroup={activeGroup} />
-        <MessageInput activeGroup={activeGroup} />
+        <Messages
+          activeGroup={activeGroup}
+          messages={messages}
+          setMessages={setMessages}
+        />
+        <MessageInput activeGroup={activeGroup} setMessages={setMessages} />
       </>
     </div>
   );

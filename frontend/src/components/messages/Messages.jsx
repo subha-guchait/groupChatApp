@@ -3,16 +3,25 @@ import Message from "./Message";
 import { jwtDecode } from "jwt-decode";
 
 import { getMessages } from "../../api/messageService";
+import { useSocket } from "../../context/SocketContext";
 
-const Messages = ({ activeGroup }) => {
-  const [messages, setMessages] = useState([]);
+const Messages = ({ activeGroup, messages, setMessages }) => {
   const messagesContainerRef = useRef(null);
+  const { socket } = useSocket();
 
   useEffect(() => {
     fetchNewMessages();
-    const interval = setInterval(fetchNewMessages, 5000);
-    return () => clearInterval(interval);
   }, [activeGroup]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("receive-message", (newMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+    });
+
+    return () => socket.off("receive-message");
+  }, [socket]);
 
   useEffect(() => {}, [activeGroup]);
 
@@ -22,12 +31,6 @@ const Messages = ({ activeGroup }) => {
         messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const getUserId = () => {
-    const token = localStorage.getItem("token");
-    const { userId } = jwtDecode(token);
-    return userId;
-  };
 
   const fetchNewMessages = async () => {
     const currentMessages =
@@ -52,11 +55,11 @@ const Messages = ({ activeGroup }) => {
 
   return (
     <div ref={messagesContainerRef} className="px-4 flex-1 overflow-auto">
-      {messages.map((message) => (
+      {messages.map((message, index) => (
         <Message
-          key={message.id}
+          key={index}
           message={message}
-          isCurrentUser={getUserId() === message.userId}
+          isCurrentUser={localStorage.getItem("userId") == message.userId}
         />
       ))}
     </div>

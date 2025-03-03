@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const { app, server } = require("./socket/socketService");
 const sequelize = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const messageRoutes = require("./routes/messageRoutes");
@@ -11,8 +12,6 @@ const User = require("./models/user");
 const Message = require("./models/message");
 const Group = require("./models/group");
 const GroupMember = require("./models/groupMember");
-
-const app = express();
 
 app.use(express.json());
 app.use(cors({ origin: "*", credentials: true }));
@@ -36,7 +35,7 @@ app.use("/api/user", userRoutes);
 const startServer = async (port) => {
   try {
     await sequelize.sync();
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (err) {

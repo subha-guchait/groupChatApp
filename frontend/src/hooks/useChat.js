@@ -39,10 +39,10 @@ const useChat = () => {
     fetchNewMessages();
 
     // Set up an interval to fetch messages every second (1000ms)
-    const interval = setInterval(fetchNewMessages, 5000);
+    // const interval = setInterval(fetchNewMessages, 5000);
 
     // Cleanup interval on component unmount
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   const addMessage = async (message) => {

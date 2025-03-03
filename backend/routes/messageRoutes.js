@@ -4,10 +4,11 @@ const {
   getNewMesages,
 } = require("../controllers/messageController");
 const { authenticate } = require("../middlewares/auth");
+const { isGroupMember } = require("../middlewares/isGroupMember");
 
 const router = express.Router();
 
-router.post("/sendmessage", authenticate, sendMessage);
-router.get("/getmessages/:groupId", authenticate, getNewMesages);
+router.post("/sendmessage/:groupId", authenticate, isGroupMember, sendMessage);
+router.get("/getmessages/:groupId", authenticate, isGroupMember, getNewMesages);
 
 module.exports = router;

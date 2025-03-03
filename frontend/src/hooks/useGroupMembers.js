@@ -5,11 +5,14 @@ import {
   addUser,
   removeUser,
 } from "../api/groupService";
+import { useSocket } from "../context/SocketContext";
 
 export default function useGroupMembers(groupId) {
   const [groupMembers, setGroupMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUser, setFilterdUser] = useState(null);
+
+  const { socket } = useSocket();
 
   useEffect(() => {
     if (!groupId) return;
@@ -70,9 +73,26 @@ export default function useGroupMembers(groupId) {
     try {
       console.log(userId);
       const res = removeUser(groupId, userId);
+
+      function checkStringOrNum(value) {
+        if (typeof value === "string") {
+          console.log("string");
+        } else if (typeof value === "number") {
+          console.log("number");
+        }
+      }
+
+      checkStringOrNum(userId);
+
       if (!res || res.error) {
         throw new Error("failed to remove user");
       }
+
+      socket.emit("hi", { ok: "hmm" });
+
+      socket.emit("remove-user", { groupId, userId });
+      console.log(socket.id);
+
       setGroupMembers((prevMembers) =>
         prevMembers.filter((member) => member.id !== userId)
       );
