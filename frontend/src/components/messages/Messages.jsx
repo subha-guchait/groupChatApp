@@ -4,10 +4,12 @@ import { jwtDecode } from "jwt-decode";
 
 import { getMessages } from "../../api/messageService";
 import { useSocket } from "../../context/SocketContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Messages = ({ activeGroup, messages, setMessages }) => {
   const messagesContainerRef = useRef(null);
   const { socket } = useSocket();
+  const { authUser } = useAuthContext();
 
   useEffect(() => {
     fetchNewMessages();
@@ -59,7 +61,7 @@ const Messages = ({ activeGroup, messages, setMessages }) => {
         <Message
           key={index}
           message={message}
-          isCurrentUser={localStorage.getItem("userId") == message.userId}
+          isCurrentUser={authUser.userId == message.userId}
         />
       ))}
     </div>

@@ -9,14 +9,14 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { authUser } = useAuthContext();
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     if (authUser) {
-      const newSocket = io("http://localhost:5000");
-      setSocket(newSocket);
-
-      newSocket.emit("user-connected", {
-        userId: +localStorage.getItem("userId"),
+      const newSocket = io("http://localhost:5000", {
+        auth: { token },
       });
+      setSocket(newSocket);
 
       return () => {
         if (newSocket) {

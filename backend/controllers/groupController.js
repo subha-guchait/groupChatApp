@@ -102,14 +102,14 @@ exports.removeUser = async (req, res) => {
   const userId = req.query.userId;
   try {
     if (!groupId) {
-      return res.status(400).json({ err: "groupId is required" });
+      return res.status(400).json({ message: "groupId is required" });
     } else if (!userId) {
-      return res.status(400).json({ err: "userId is required" });
+      return res.status(400).json({ message: "userId is required" });
     }
 
     const group = await findGroup(groupId);
     if (!group) {
-      return res.status(400).json({ err: "Group doesnot exists" });
+      return res.status(400).json({ message: "Group doesnot exists" });
     }
 
     const adminUser = await checkAdmin(req.user.id, groupId);
@@ -117,20 +117,22 @@ exports.removeUser = async (req, res) => {
     if (!adminUser) {
       return res
         .status(403)
-        .json({ error: "only admin can perform this task" });
+        .json({ message: "only admin can perform this task" });
     }
 
     const result = await removeUserFromGroup(userId, groupId);
 
     if (result == 0) {
-      return res.status(404).json({ error: "User is not part of this group" });
+      return res
+        .status(404)
+        .json({ message: "User is not part of this group" });
     }
 
     res
       .status(200)
       .json({ message: "User removed from the group successfully" });
   } catch (err) {
-    res.status(500).json({ error: err.message || "Internal Server Error" });
+    res.status(500).json({ message: err.message || "Internal Server Error" });
   }
 };
 

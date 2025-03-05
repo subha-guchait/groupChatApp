@@ -1,7 +1,9 @@
 const { Op } = require("sequelize");
+const sequelize = require("sequelize");
 const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
+console.log(User);
 const createUser = require("../services/authServices");
 const generateAccessToken = require("../services/generateAccessTokenService");
 

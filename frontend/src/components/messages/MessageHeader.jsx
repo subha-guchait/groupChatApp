@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MemberModal from "./MemberModal";
 import useGroupMembers from "../../hooks/useGroupMembers";
 
-const MessageHeader = ({ activeGroup }) => {
+const MessageHeader = ({ activeGroup, setIsMember }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     groupMembers,
@@ -12,7 +12,7 @@ const MessageHeader = ({ activeGroup }) => {
     searchQuery,
     setSearchQuery,
     filteredUser,
-  } = useGroupMembers(activeGroup?.id);
+  } = useGroupMembers(activeGroup?.id, activeGroup?.name, setIsMember);
 
   const handleToggleModal = () => {
     setIsModalOpen((prev) => !prev);

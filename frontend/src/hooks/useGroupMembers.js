@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import {
   getGroupMembers,
   getQueryUser,
@@ -7,7 +8,7 @@ import {
 } from "../api/groupService";
 import { useSocket } from "../context/SocketContext";
 
-export default function useGroupMembers(groupId) {
+export default function useGroupMembers(groupId, groupName, setIsMember) {
   const [groupMembers, setGroupMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUser, setFilterdUser] = useState(null);
@@ -21,8 +22,12 @@ export default function useGroupMembers(groupId) {
       try {
         const members = await getGroupMembers(groupId);
         setGroupMembers(members);
-      } catch (error) {
-        console.error("Error fetching group members:", error);
+        setIsMember(true);
+      } catch (err) {
+        console.error("Error fetching group members:", err);
+        if (err.message == "user is not a group member") {
+          setIsMember(false);
+        }
       }
     };
 
@@ -53,7 +58,10 @@ export default function useGroupMembers(groupId) {
 
   const addMember = async (user) => {
     try {
-      const res = await addUser(groupId, user.id);
+      const addedUserId = user.id;
+      const res = await addUser(groupId, addedUserId);
+      socket.emit("add-user", { groupId, groupName, addedUserId });
+      setSearchQuery("");
       if (!res || res.error) {
         if (!res || res.error) {
           throw new Error(res?.error || "Failed to add user to the group.");
@@ -72,32 +80,16 @@ export default function useGroupMembers(groupId) {
   const removeMember = async (userId) => {
     try {
       console.log(userId);
-      const res = removeUser(groupId, userId);
+      const res = await removeUser(groupId, userId);
 
-      function checkStringOrNum(value) {
-        if (typeof value === "string") {
-          console.log("string");
-        } else if (typeof value === "number") {
-          console.log("number");
-        }
-      }
-
-      checkStringOrNum(userId);
-
-      if (!res || res.error) {
-        throw new Error("failed to remove user");
-      }
-
-      socket.emit("hi", { ok: "hmm" });
-
-      socket.emit("remove-user", { groupId, userId });
+      socket.emit("remove-user", { groupId, removedUserId: userId });
       console.log(socket.id);
 
       setGroupMembers((prevMembers) =>
         prevMembers.filter((member) => member.id !== userId)
       );
     } catch (err) {
-      console.log(err);
+      toast.error(err.message || "Failed to remove user from the group");
     }
   };
 

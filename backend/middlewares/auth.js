@@ -5,9 +5,13 @@ exports.authenticate = async (req, res, next) => {
   try {
     const token = req.header("Authorization");
     if (!token) {
-      return res.status(401).json({ message: "Access denied" });
+      return res.status(401).json({ message: "Authorization token missing" });
     }
     const user = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
     const userDetails = await User.findOne({ where: { id: user.userId } });
 
     if (!userDetails) {

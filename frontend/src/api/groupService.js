@@ -27,7 +27,7 @@ export const getGroupMembers = async (groupId) => {
 
     return res.data.members;
   } catch (err) {
-    throw new Error("Failed to fetch member");
+    throw new Error(err.response.data.message);
   }
 };
 
@@ -58,7 +58,7 @@ export const addUser = async (groupId, userId) => {
     );
     return res.data;
   } catch (err) {
-    throw new Error(err);
+    throw new Error(err.response.data.message);
   }
 };
 export const removeUser = async (groupId, userId) => {
@@ -71,7 +71,6 @@ export const removeUser = async (groupId, userId) => {
     );
     return res.data;
   } catch (err) {
-    console.error(err);
-    throw new Error(err);
+    throw new Error(err.response.data.message);
   }
 };

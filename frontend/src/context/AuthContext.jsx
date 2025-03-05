@@ -8,30 +8,24 @@ export const useAuthContext = () => {
 };
 
 export const AuthContextProvider = ({ children }) => {
-  const getToken = () => {
-    let token = localStorage.getItem("token") || null;
-    let id = localStorage.getItem("userId") || null;
+  const getDecodedToken = () => {
+    const token = localStorage.getItem("token") || null;
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
         if (decodedToken.exp < Date.now() / 1000) {
           localStorage.clear();
           return null;
-        } else {
-          if (!id) {
-            const { userId } = jwtDecode(token);
-            localStorage.setItem("userId", userId);
-          }
         }
+        return decodedToken;
       } catch (err) {
         localStorage.removeItem("token");
         return null;
       }
     }
-    return token;
   };
 
-  const [authUser, setAuthUser] = useState(getToken);
+  const [authUser, setAuthUser] = useState(getDecodedToken);
 
   return (
     <AuthContext.Provider value={{ authUser, setAuthUser }}>

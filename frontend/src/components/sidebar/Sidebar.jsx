@@ -5,16 +5,35 @@ import Conversations from "./Conversations";
 import LogoutButton from "./LogoutButton";
 import CreateGroup from "./CreateGroup";
 import { getGroups } from "../../api/userService";
+import { useSocket } from "../../context/SocketContext";
 
 const Sidebar = ({ activeGroup, setActiveGroup }) => {
   const [groups, setGroups] = useState([]);
   const [filteredGroups, setFilteredGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const { socket } = useSocket();
+
   const fetchGroups = async () => {
     const groupsList = await getGroups();
     setGroups(groupsList);
   };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("added-group", ({ groupId, groupName }) => {
+      setGroups((prev) => {
+        //checking if the group exists
+        if (prev.some((group) => group.id === groupId)) {
+          return prev;
+        }
+        return [{ id: groupId, name: groupName }, ...prev];
+      });
+    });
+
+    return () => socket.off("added-group");
+  }, [socket]);
 
   useEffect(() => {
     fetchGroups();

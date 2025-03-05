@@ -37,6 +37,7 @@ const startServer = async (port) => {
     await sequelize.sync();
     server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
+      console.log("------------------------------------------------");
     });
   } catch (err) {
     console.log(err);

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import ChatBubble from "../../components/chatBubble";
 import useChat from "../../hooks/useChat";
-import Sidebar from "../../components/sidebar/SideBar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import MessageContainer from "../../components/messages/MessageContainer";
 
 const Home = () => {
@@ -12,13 +12,8 @@ const Home = () => {
   return (
     <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden">
       <Sidebar activeGroup={activeGroup} setActiveGroup={setActiveGroup} />
-      {activeGroup ? (
-        <MessageContainer activeGroup={activeGroup} />
-      ) : (
-        <div className="flex-1 flex items-center justify-center text-gray-500 ">
-          Select a group to start chatting
-        </div>
-      )}
+
+      <MessageContainer activeGroup={activeGroup} />
     </div>
   );
 };
