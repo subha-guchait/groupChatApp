@@ -20,5 +20,3 @@ exports.userGroupsList = async (req, res) => {
     res.status(500).json({ err: "failed to get groups list" });
   }
 };
-
-exports.userList = async (req, res) => {};

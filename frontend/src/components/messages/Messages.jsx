@@ -6,6 +6,8 @@ import { getMessages } from "../../api/messageService";
 import { useSocket } from "../../context/SocketContext";
 import { useAuthContext } from "../../context/AuthContext";
 
+import notificationSound from "../../assets/sounds/notification.mp3";
+
 const Messages = ({ activeGroup, messages, setMessages }) => {
   const messagesContainerRef = useRef(null);
   const { socket } = useSocket();
@@ -17,8 +19,9 @@ const Messages = ({ activeGroup, messages, setMessages }) => {
 
   useEffect(() => {
     if (!socket) return;
-
     socket.on("receive-message", (newMessage) => {
+      const sound = new Audio(notificationSound); //notification sound
+      sound.play();
       setMessages((prev) => [...prev, newMessage]);
     });
 

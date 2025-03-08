@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const groupRoutes = require("./routes/groupRoutes");
 const userRoutes = require("./routes/userRoutes");
+const mediaRoutes = require("./routes/mediaRoutes");
 const User = require("./models/user");
 const Message = require("./models/message");
 const Group = require("./models/group");
@@ -31,6 +32,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/group", groupRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/media", mediaRoutes);
 
 const startServer = async (port) => {
   try {

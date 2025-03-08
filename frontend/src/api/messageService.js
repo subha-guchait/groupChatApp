@@ -17,11 +17,11 @@ export const getMessages = async (groupId, lastMessageId) => {
   }
 };
 
-export const sendMessage = async (groupId, message) => {
+export const sendMessage = async (groupId, message, mediaUrl) => {
   try {
     const response = await axios.post(
       `${API_URL}/sendmessage/${groupId}`,
-      { message: message },
+      { message: message, media: mediaUrl },
       {
         headers: { Authorization: localStorage.getItem("token") },
       }

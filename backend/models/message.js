@@ -12,7 +12,11 @@ const Message = sequelize.define("message", {
   },
   message: {
     type: Sequelize.TEXT,
-    allowNull: false,
+    allowNull: true,
+  },
+  media: {
+    type: Sequelize.STRING,
+    allowNull: true,
   },
   userName: {
     type: Sequelize.STRING,

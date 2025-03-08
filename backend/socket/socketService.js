@@ -45,7 +45,7 @@ io.on("connection", async (socket) => {
     console.log(`User ${userId} joined group ${groupId}`);
   });
 
-  socket.on("send-message", ({ groupId, message, createdAt }) => {
+  socket.on("send-message", ({ groupId, message, media, createdAt }) => {
     //for chcking if the user is still in the room
     if (!socket.rooms.has(groupId)) {
       console.log(`User ${userId} is not a member of the group ${groupId}.`);
@@ -58,6 +58,7 @@ io.on("connection", async (socket) => {
 
     const newMessage = {
       message,
+      media,
       userId,
       userName,
       createdAt,
