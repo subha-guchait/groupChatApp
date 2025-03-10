@@ -65,7 +65,7 @@ const MessageInput = ({ activeGroup, setMessages, isMember, setIsMember }) => {
               />
               <button
                 type="button"
-                className={`hidden sm:flex btn btn-circle ${
+                className={` btn btn-circle ${
                   mediaPreview ? "text-emerald-500" : "text-zinc-400"
                 }`}
                 disabled={uploading}
