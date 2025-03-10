@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/message";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/message`;
 
 export const getMessages = async (groupId, lastMessageId) => {
   try {

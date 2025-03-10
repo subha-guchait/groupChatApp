@@ -13,6 +13,8 @@ const User = require("./models/user");
 const Message = require("./models/message");
 const Group = require("./models/group");
 const GroupMember = require("./models/groupMember");
+const ArchiveMessage = require("./models/archiveMessage");
+require("./cronjobs/archiveMessagesJob");
 
 app.use(express.json());
 app.use(cors({ origin: "*", credentials: true }));
@@ -23,6 +25,12 @@ Message.belongsTo(User);
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
+
+User.hasMany(ArchiveMessage);
+ArchiveMessage.belongsTo(User);
+
+Group.hasMany(ArchiveMessage);
+ArchiveMessage.belongsTo(Group);
 
 User.belongsToMany(Group, { through: GroupMember });
 Group.belongsToMany(User, { through: GroupMember });

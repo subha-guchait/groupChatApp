@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-
 import toast from "react-hot-toast";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useAuthContext } from "../context/AuthContext";
+import { logIn } from "../api/authService";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -16,31 +16,13 @@ const useLogin = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
-
-      localStorage.setItem("token", res.data.token);
-      const { userId, name } = jwtDecode(res.data.token);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("userName", name);
-
+      const token = await logIn(email, password);
+      localStorage.setItem("token", token);
       toast.success("Login successful");
-
       //context
-      setAuthUser(res.data.token);
+      setAuthUser(token);
     } catch (err) {
       console.error(err);
-      if (err.response.status === 401) {
-        toast.error("Incorrect password");
-        return;
-      }
-      if (err.response.status === 404) {
-        toast.error("User not exsits please signup");
-        return;
-      }
-      if (err.response.status === 400) {
-        toast.error("All fields are required");
-        return;
-      }
       toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);

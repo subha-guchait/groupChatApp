@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
-
+import { signUp } from "../api/authService";
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
@@ -20,13 +20,7 @@ const useSignup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/api/auth/signup", {
-        name,
-        email,
-        phone,
-        password,
-        isAccepted,
-      });
+      const token = await signUp(name, email, phone, password, isAccepted);
 
       toast.success("Signup successful");
       localStorage.setItem("token", res.data.token);
@@ -35,10 +29,6 @@ const useSignup = () => {
       setAuthUser(res.data.token);
     } catch (err) {
       console.error(err);
-      if (err.response.status === 409) {
-        toast.error("Email or phone number already exists");
-        return;
-      }
       toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);

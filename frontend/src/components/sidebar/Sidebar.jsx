@@ -6,6 +6,7 @@ import LogoutButton from "./LogoutButton";
 import CreateGroup from "./CreateGroup";
 import { getGroups } from "../../api/userService";
 import { useSocket } from "../../context/SocketContext";
+import toast from "react-hot-toast";
 
 const Sidebar = ({ activeGroup, setActiveGroup }) => {
   const [groups, setGroups] = useState([]);
@@ -15,8 +16,13 @@ const Sidebar = ({ activeGroup, setActiveGroup }) => {
   const { socket } = useSocket();
 
   const fetchGroups = async () => {
-    const groupsList = await getGroups();
-    setGroups(groupsList);
+    try {
+      const groupsList = await getGroups();
+      setGroups(groupsList);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "something went wrong");
+    }
   };
 
   useEffect(() => {

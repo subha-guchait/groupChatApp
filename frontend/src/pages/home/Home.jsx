@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 
-import ChatBubble from "../../components/chatBubble";
 import useChat from "../../hooks/useChat";
 import Sidebar from "../../components/sidebar/Sidebar";
 import MessageContainer from "../../components/messages/MessageContainer";

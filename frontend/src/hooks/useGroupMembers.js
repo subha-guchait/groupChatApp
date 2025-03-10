@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useDebounce } from "react-use";
 import {
   getGroupMembers,
   getQueryUser,
@@ -11,7 +12,7 @@ import { useSocket } from "../context/SocketContext";
 export default function useGroupMembers(groupId, groupName, setIsMember) {
   const [groupMembers, setGroupMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUser, setFilterdUser] = useState(null);
+  const [filteredUser, setFilteredUser] = useState(null);
 
   const { socket } = useSocket();
 
@@ -25,65 +26,68 @@ export default function useGroupMembers(groupId, groupName, setIsMember) {
         setIsMember(true);
       } catch (err) {
         console.error("Error fetching group members:", err);
-        if (err.message == "user is not a group member") {
+        if (err.message === "user is not a group member") {
           setIsMember(false);
         }
       }
     };
 
     fetchMembers();
-  }, [groupId]); // Only runs when `groupId` changes
+  }, [groupId]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
+  // debounce function
+  useDebounce(
+    () => {
       if (
         !searchQuery ||
         (!isValidPhoneNumber(searchQuery) && !isValidEmail(searchQuery))
       ) {
-        setFilterdUser(null);
+        setFilteredUser(null);
         return;
       }
-      try {
-        if (isValidPhoneNumber(searchQuery) || isValidEmail(searchQuery)) {
-          const user = await getQueryUser(groupId, searchQuery);
-          setFilterdUser(user);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
 
-    fetchUser();
-  }, [searchQuery]);
+      const fetchUser = async () => {
+        try {
+          const user = await getQueryUser(groupId, searchQuery);
+          setFilteredUser(user);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+          setFilteredUser(null);
+        }
+      };
+
+      fetchUser();
+    },
+    500,
+    [searchQuery] // Runs only when `searchQuery` changes
+  );
 
   const addMember = async (user) => {
     try {
       const addedUserId = user.id;
       const res = await addUser(groupId, addedUserId);
       socket.emit("add-user", { groupId, groupName, addedUserId });
-      setSearchQuery("");
+      setSearchQuery(""); // Clear search query on success
+
       if (!res || res.error) {
-        if (!res || res.error) {
-          throw new Error(res?.error || "Failed to add user to the group.");
-        }
+        throw new Error(res?.error || "Failed to add user to the group.");
       }
+
       if (!groupMembers.find((member) => member.id === user.id)) {
         setGroupMembers((prevMembers) => [...prevMembers, user]);
       }
-      setFilterdUser(null);
+
+      setFilteredUser(null);
     } catch (err) {
-      toast.error("falied to add user");
-      console.log(err);
+      toast.error("Failed to add user");
+      console.error(err);
     }
   };
 
   const removeMember = async (userId) => {
     try {
-      console.log(userId);
       const res = await removeUser(groupId, userId);
-
       socket.emit("remove-user", { groupId, removedUserId: userId });
-      console.log(socket.id);
 
       setGroupMembers((prevMembers) =>
         prevMembers.filter((member) => member.id !== userId)

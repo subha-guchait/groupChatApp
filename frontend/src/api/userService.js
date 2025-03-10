@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "api/user";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/user`;
 
 export const getGroups = async () => {
   try {
@@ -11,6 +11,6 @@ export const getGroups = async () => {
     return res.data.groups;
   } catch (err) {
     console.error(err);
-    return [];
+    throw new Error(err.response.data.message);
   }
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/media/";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/media/`;
 
 export const uploadMediaInGroup = async (selectedFile, groupId, options) => {
   if (!selectedFile) return null; // No file selected
