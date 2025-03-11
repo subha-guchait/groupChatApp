@@ -83,6 +83,9 @@ AWS_REGION=your_aws_region
 AWS_BUCKET=your_s3_bucket_name
 AWS_ACCESS_KEY_ID=your_aws_access_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+
+#Frontend URL
+FRONTEND_URL = your_frontend_url
 ```
 
 #### Frontend `.env` Example:

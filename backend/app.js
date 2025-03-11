@@ -17,7 +17,7 @@ const ArchiveMessage = require("./models/archiveMessage");
 require("./cronjobs/archiveMessagesJob");
 
 app.use(express.json());
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
 //database associations
 User.hasMany(Message);
